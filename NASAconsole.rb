@@ -80,7 +80,7 @@ class NASAconsole
 
       while(true)
         @rovers.each_with_index do |rover, index|
-          puts "Rover #{index} positioned at  #{rover.current_postition}. Waiting for instruction..."
+          puts "Rover #{index} positioned at  #{rover.current_position}. Waiting for instruction..."
           instruction = gets.chomp
           instruction_array = instruction.split(//)
           if (instruction_array - @valid_instructions) != []
@@ -93,7 +93,7 @@ class NASAconsole
             puts "Looks like your rover is at the edge of the plateau, cannot move further."
           end
 
-          puts rover.current_postition.to_s
+          puts rover.current_position.to_s
         end
       end
 

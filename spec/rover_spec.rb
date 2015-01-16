@@ -63,6 +63,60 @@ describe Rover do
 		expect { Rover.new 6,2, "W", @plateau }.to raise_error(OutOfPlateauRangeError)
 	end
 
-	
+	it "should fail while accessing the private methods 'move' and 'turn' on rover" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1 ,2, "W", @plateau
+		expect { @rover.move }.to raise_error(NoMethodError)
+		expect { @rover.turn }.to raise_error(NoMethodError)
+	end
+
+	it "should be able to access 'process_instruction_string' method on rover" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1 ,2, "W", @plateau
+		expect(@rover.respond_to?(:process_instruction_string)).to eq(true)
+	end
+
+	it "should have only READ access to the 'current_position' and 'directions' attributes on Rover" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1 ,2, "W", @plateau
+		expect(@rover.respond_to?(:current_position)).to eq(true)
+		expect(@rover.respond_to?(:current_position=)).to eq(false)
+		expect(@rover.respond_to?(:directions)).to eq(true)
+		expect(@rover.respond_to?(:directions=)).to eq(false)
+	end
+
+	it "should have only READ access to the 'upper_limit' attribute on Plateau" do 
+		@plateau = Plateau.new 5,5		
+		expect(@plateau.respond_to?(:upper_limit)).to eq(true)
+		expect(@plateau.respond_to?(:upper_limit=)).to eq(false)
+	end
+
+	it "should reject invalid instructions i.e anything other than L,R,M" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1 ,2, "W", @plateau
+		expect { @rover.process_instruction_string("W") }.to raise_error(InvalidInputError)
+	end
+
+	it "should process the turn instructions properly" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1 ,2, "W", @plateau
+		@rover.process_instruction_string("R")
+		expect(@rover.current_position).to eq([1,2,"N"])
+		@rover.process_instruction_string("R")
+		expect(@rover.current_position).to eq([1,2,"E"])
+		@rover.process_instruction_string("R")
+		expect(@rover.current_position).to eq([1,2,"S"])
+		@rover.process_instruction_string("R")
+		expect(@rover.current_position).to eq([1,2,"W"])
+
+		@rover.process_instruction_string("L")
+		expect(@rover.current_position).to eq([1,2,"S"])
+		@rover.process_instruction_string("L")
+		expect(@rover.current_position).to eq([1,2,"E"])
+		@rover.process_instruction_string("L")
+		expect(@rover.current_position).to eq([1,2,"N"])
+		@rover.process_instruction_string("L")
+		expect(@rover.current_position).to eq([1,2,"W"])
+	end 
 
 end

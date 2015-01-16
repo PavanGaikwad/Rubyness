@@ -20,7 +20,7 @@
 
 
 class Rover
-  attr_reader :current_postition
+  attr_reader :current_position
   attr_reader :directions
   def initialize(x,y,direction,plateau) # rover needs to have the plateau reference to know the terrain.
     @directions = ["N", "E", "S", "W"]
@@ -38,21 +38,21 @@ class Rover
     
     raise InvalidInputError if !(@directions.include?(direction))
     raise OutOfPlateauRangeError if @plateau.out_of_range?(x,y)
-    @current_postition = [x,y,direction] 
+    @current_position = [x,y,direction] 
   end
 
   private
   def turn(instruction)
     # turns the rover in the given direction, in place.
-    current_direction_index = @directions.index(@current_postition[2])
+    current_direction_index = @directions.index(@current_position[2])
 
     case instruction
     when "L" then
-      @current_postition.delete_at(2)
-      @current_postition << @directions[current_direction_index - 1]
+      @current_position.delete_at(2)
+      @current_position << @directions[current_direction_index - 1]
     when "R" then
-      @current_postition.delete_at(2)
-      @directions[current_direction_index + 1] ? @current_postition << @directions[current_direction_index + 1] : @current_postition << @directions[0]
+      @current_position.delete_at(2)
+      @directions[current_direction_index + 1] ? @current_position << @directions[current_direction_index + 1] : @current_position << @directions[0]
     else raise InvalidInputError
     end
   end
@@ -60,18 +60,18 @@ class Rover
   private
   def move
     # Moves the rover 1 step ahead in the current direction
-    current_direction = @current_postition[2]
-    x,y = @current_postition
+    current_direction = @current_position[2]
+    x,y = @current_position
 
     case current_direction
     when "N"
-      @plateau.out_of_range?(x,y+1) ? (raise OutOfPlateauRangeError) : @current_postition[1] += 1
+      @plateau.out_of_range?(x,y+1) ? (raise OutOfPlateauRangeError) : @current_position[1] += 1
     when "S"
-      @plateau.out_of_range?(x,y-1) ? (raise OutOfPlateauRangeError) : @current_postition[1] -= 1
+      @plateau.out_of_range?(x,y-1) ? (raise OutOfPlateauRangeError) : @current_position[1] -= 1
     when "E"
-      @plateau.out_of_range?(x+1,y) ? (raise OutOfPlateauRangeError) : @current_postition[0] += 1
+      @plateau.out_of_range?(x+1,y) ? (raise OutOfPlateauRangeError) : @current_position[0] += 1
     when "W"
-      @plateau.out_of_range?(x-1,y) ? (raise OutOfPlateauRangeError) : @current_postition[0] -= 1
+      @plateau.out_of_range?(x-1,y) ? (raise OutOfPlateauRangeError) : @current_position[0] -= 1
     else
       raise InvalidInputError
     end
@@ -190,7 +190,7 @@ end
 
 #       while(true)
 #         @rovers.each_with_index do |rover, index|
-#           puts "Rover #{index} positioned at  #{rover.current_postition}. Waiting for instruction..."
+#           puts "Rover #{index} positioned at  #{rover.current_position}. Waiting for instruction..."
 #           instruction = gets.chomp
 #           instruction_array = instruction.split(//)
 #           if (instruction_array - @valid_instructions) != []
@@ -203,7 +203,7 @@ end
 #             puts "Looks like your rover is at the edge of the plateau, cannot move further."
 #           end
 
-#           puts rover.current_postition.to_s
+#           puts rover.current_position.to_s
 #         end
 #       end
 
