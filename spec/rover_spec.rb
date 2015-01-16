@@ -119,4 +119,19 @@ describe Rover do
 		expect(@rover.current_position).to eq([1,2,"W"])
 	end 
 
+	it "should process the move instruction properly" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1,2,"W",@plateau
+		@rover.process_instruction_string("M")
+		
+	end
+
+	it "should raise OutOfPlateauRangeError if asked to move beyond the plateau range" do 
+		@plateau = Plateau.new 5,5
+		@rover = Rover.new 1,2,"W",@plateau
+		expect {@rover.process_instruction_string("MM")}.to raise_error(OutOfPlateauRangeError)
+		@rover = Rover.new 1,2,"W",@plateau
+		expect {@rover.process_instruction_string("RRMMMMMM")}.to raise_error(OutOfPlateauRangeError)
+	end
+
 end
